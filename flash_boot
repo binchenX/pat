@@ -1,0 +1,3 @@
+# install boot, part 0: boot.img
+fatload usb 0:1 0x8000000 boot.img
+mmc write 0x8000000 0x2000 0x77e3
