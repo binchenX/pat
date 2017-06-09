@@ -1,10 +1,10 @@
-# Android build
+# Poplar Android Build
 
 This file documents how to build Poplar Android.
 
 ## Get and Build Android
 
-For general set up, refer to [official Android doc](https://source.android.com/source/initializing). 
+For general set up, refer to [official Android doc](https://source.android.com/source/initializing).
 
 ### Get AOSP android-7.1.1_r3
 ```
@@ -32,12 +32,12 @@ make -j8
 ```
 
 ## Update Bootloader
-(*notes*: this section will go after change been merged to poplar-u-boot)
+(*notes: this section will go after change being merged to poplar-u-boot*)
 
 Changes are need to make u-boot be able to boot an arm64 Android bootimage. Follow the instructions [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md) to download and build the `ATF`, `l-loader` and `U-boot`. But for `u-boot` use a different repo/branch, which contains un-merged changes to support boot an android arm64 image.
 
 ```
-git clone git@github.com:pierrchen/poplar-u-boot.git -b bootai 
+git clone git@github.com:pierrchen/poplar-u-boot.git -b bootai
 ```
 
 Build all as described [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md), you will get a `l-loader.bin`, which is our bootloader.
@@ -56,12 +56,12 @@ git clone https://github.com/linaro/poplar-linux.git -b android-4.9-poplar
 
 Follow [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md#step-4-build-linux) to build.
 
-Copy the `arch/arm64/boot/Image` and `arch/arm64/boot/dts/hisilicon/hi3798cv200-poplar.dtb` to ${your_android}/device/hisilicon/poplar-kernel.
+Copy the `arch/arm64/boot/Image` and `arch/arm64/boot/dts/hisilicon/hi3798cv200-poplar.dtb` to `${your_android}/device/hisilicon/poplar-kernel`.
 
-To rebuilt the bootimage;
+To rebuild the `$OUT/boot.img`;
 
 ```
 source build/envsetup.sh
 lunch poplar-eng
-make bootimage -j8 
+make bootimage -j8
 ```
