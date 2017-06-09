@@ -1,3 +1,0 @@
-# install bootloader, part 0: bootloader.img
-fatload usb 0:1 0x8000000 bootloader.img
-mmc write 0x8000000 0x1 0x77f
