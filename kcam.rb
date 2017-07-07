@@ -1,14 +1,11 @@
+#!/usr/bin/env ruby
 # to Analysis kernel two config files, and/or merge file b into file a.
 # kcam - Kernel Config Analysis and Merge
 # For analysis use:
 # "kcam -i a b t"
-# For merge use
+# For merge or substract use
 # "kcam -a a b out" : merge configs in b into a
 # "kcam -s a b out" : remove configs in b from a
-# how to use it:
-# kcam -a minimal_defconfig android-base.cfg step1.config
-# kcam -i hikey_defconfig android-base.cfg 1 android_config_not_in_hikey.config
-# kcam -s step1.config android_config_not_in_hikey.config config_to_try.config
 @argv_size = ARGV.size
 if @argv_size < 3
     puts "kcam -i a b [c] or kcam -a|-s a b out"
@@ -27,7 +24,7 @@ if @ops.eql?("-i")
         end
     end
 elsif @ops.eql?("-a") or @ops.eql?("-s")
-    if ARGV.size < 4
+    if @argv_size < 4
         puts "usage: kcam -a|-s a b out"
         exit
     end
