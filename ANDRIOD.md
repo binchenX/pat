@@ -51,10 +51,10 @@ To flash the bootloader, follow [here](https://github.com/pierrchen/pat/blob/mas
 Choose the android branch for the kernel, currently none is fully ready, but you can use `android-4.9-poplar` to start with.
 
 ```
-git clone https://github.com/linaro/poplar-linux.git -b android-4.9-poplar
+git clone git@github.com:pierrchen/poplar-linux.git -b bin/android-4.9-poplar
 ```
 
-Follow [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md#step-4-build-linux) to build.
+Follow [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md#step-4-build-linux) to build, but use `poplar_defconfig` instead of `defconfig` for android kernel configration.
 
 Copy the `arch/arm64/boot/Image` and `arch/arm64/boot/dts/hisilicon/hi3798cv200-poplar.dtb` to `${your_android}/device/hisilicon/poplar-kernel`.
 
