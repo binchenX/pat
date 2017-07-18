@@ -65,3 +65,38 @@ source build/envsetup.sh
 lunch poplar-eng
 make bootimage -j8
 ```
+
+## Boot Android
+
+We *will* boot Android automatically but for now, you'll run that manually.
+
+Enter into the u-boot console (by hitting any key to stop autoboot), and type following command:
+
+```
+poplar# run bootai
+```
+
+Alternatively, you can boot it boot it from usb, by putting kernel, dtb, and android ramdisk in a fat32 formatted usb disk, as shown below. 
+
+```
+   983040   fastboot.bin
+     9197   hi3798cv200-poplar.dtb
+ 15733248   Image
+  1273215   ramdisk.android.uboot
+```
+
+This may be preferred kernel and bootloader development to validate new changes, since you don't need to reflash the boot partitions (but you will have to copy to usb :)).
+
+The `ramdisk.android.uboot` is u-boot legacy format ramdisk, as produced by
+mkimage.
+
+```
+mkimage -n 'Android Ramdisk Image' -A arm64 -O linux -T ramdisk -C none
+-d $OUT/ramdisk.img $OUT/ramdisk.android.uboot
+```
+
+To run, enter into the u-boot console, and type
+```
+poplar# run setupa
+poplar# run boota
+```
