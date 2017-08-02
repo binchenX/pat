@@ -44,8 +44,8 @@ Notes:
 
 4. Follow [this](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md), check the section `Run the recovery on the Poplar board`, to run the flash scripts in bootloader mode. Just replace the install.scr with flash_xxx.scr you want to use.
 
+say, to flash bootloader, use the `flash_bootloader.scr` script.
 ```
     usb reset
-    fatload usb 0:1 ${scriptaddr} flash_xxxx.scr
-    source ${scriptaddr}
+    fatload usb 0:1 ${scriptaddr} flash_bootloader.scr; source ${scriptaddr}
 ```
