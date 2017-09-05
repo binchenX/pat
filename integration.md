@@ -83,3 +83,16 @@ For specific issues:
 
 It is always a good idea to provide the start up logs as well to make sure the issue isn't caused in early phase (case study: not able the get dhcp address is due to mounting failure in data partition).
 
+- audio debug/log capture
+
+Play the media as described in 1.2, 1.3. Make sure the media is keep playing during following log capture process. The youtube one is long enough (~4 minutes). 
+
+When the media is playing, do following in the host. 
+
+(host) 
+adb shell ps                             >> log_no_audio
+adb shell dumpsys media.audio_flinger    >> log_no_audio
+adb shell dumpsys media.audio_flinger    >> log_no_audio
+adb logcat                               >> log_no_audio
+
+`ctrl+c` to kill logcat and send along the `log_no_audio` file.
