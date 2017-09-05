@@ -20,8 +20,8 @@ Use the `newUboot` branch to work with new u-boot and new kernel.
 
 ```
 mkdir device/hisilicon
-git clone ssh://git@dev-private-git.linaro.org/aspen/staging/device/linaro/poplar.git  -b newUboot    device/hisilicon/poplar
-git clone ssh://git@dev-private-git.linaro.org/aspen/staging/device/linaro/poplar-kernel.git -b newUboot  device/hisilicon/poplar-kernel
+git clone ssh://git@dev-private-git.linaro.org/aspen/staging/device/linaro/poplar.git   device/hisilicon/poplar
+git clone ssh://git@dev-private-git.linaro.org/aspen/staging/device/linaro/poplar-kernel.git device/hisilicon/poplar-kernel
 ```
 
 ### Build
@@ -31,44 +31,41 @@ lunch poplar-eng
 make -j8
 ```
 
-## Update Bootloader
-(*notes: this section will go after change being merged to poplar-u-boot*)
-
-Changes are need to make u-boot be able to boot an arm64 Android bootimage. Follow the instructions [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md) to download and build the `ATF`, `l-loader` and `U-boot`. But for `u-boot` use a different repo/branch, which contains un-merged changes to support boot an android arm64 image.
-
-```
-git clone git@github.com:pierrchen/poplar-u-boot.git -b bootai
-```
-
-Build all as described [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md), you will get a `l-loader.bin`, which is our bootloader.
-
-To flash the bootloader, follow [here](https://github.com/pierrchen/pat/blob/master/README.md)
-
 ## Update Kernel and DTB
 
-`device/hisilicon/poplar-kernel` come with the prebuilt kernel and dtb. This section explains how to update it and rebuilt the `boot.img`. This is useful for kernel developers.
+- pack new kernel and dtb into new boot.img, and boot from emmc
 
-Choose the android branch for the kernel, currently none is fully ready, but you can use `android-4.9-poplar` to start with.
+`device/hisilicon/poplar-kernel` come with the prebuilt kernel and dtb. To update the kernel and dtb, just copy what you newly built one in to `${your_android}/device/hisilicon/poplar-kernel`.
+
+To rebuild the `$OUT/boot.img`,
+```
+  source build/envsetup.sh
+  lunch poplar-eng
+  make bootimage -j8
+```
+
+Then, flash the new boot.img to the board, and boot from emmc.
+
+- put the new kernel/dtb into usb, and boot from usb
+
+Alternatively, you can just to put new kernel and dtb in to a fat32 formatted usb disk.
 
 ```
-git clone git@github.com:pierrchen/poplar-linux.git -b bin/android-4.9-poplar
+     9197   hi3798cv200-poplar.dtb
+ 15733248   Image
+  1273215   ramdisk.android.uboot
 ```
 
-Follow [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md#step-4-build-linux) to build, but use `poplar_defconfig` instead of `defconfig` for android kernel configration.
-
-Copy the `arch/arm64/boot/Image` and `arch/arm64/boot/dts/hisilicon/hi3798cv200-poplar.dtb` to `${your_android}/device/hisilicon/poplar-kernel`.
-
-To rebuild the `$OUT/boot.img`;
+Note that, the usb must also have a `ramdisk.android.uboot` file, it is u-boot legacy format ramdisk, as produced by mkimage.
 
 ```
-source build/envsetup.sh
-lunch poplar-eng
-make bootimage -j8
+mkimage -n 'Android Ramdisk Image' -A arm64 -O linux -T ramdisk -C none
+-d $OUT/ramdisk.img $OUT/ramdisk.android.uboot
 ```
 
 ## Boot Android
 
-We *will* boot Android automatically but for now, you'll run that manually.
+- boot from emmc
 
 Enter into the u-boot console (by hitting any key to stop autoboot), and type following command:
 
@@ -76,27 +73,55 @@ Enter into the u-boot console (by hitting any key to stop autoboot), and type fo
 poplar# run bootai
 ```
 
-Alternatively, you can boot it boot it from usb, by putting kernel, dtb, and android ramdisk in a fat32 formatted usb disk, as shown below. 
+- boot from usb
 
-```
-   983040   fastboot.bin
-     9197   hi3798cv200-poplar.dtb
- 15733248   Image
-  1273215   ramdisk.android.uboot
-```
+Enter into the u-boot console (by hitting any key to stop autoboot), and type following command:
 
-This may be preferred kernel and bootloader development to validate new changes, since you don't need to reflash the boot partitions (but you will have to copy to usb :)).
-
-The `ramdisk.android.uboot` is u-boot legacy format ramdisk, as produced by
-mkimage.
-
-```
-mkimage -n 'Android Ramdisk Image' -A arm64 -O linux -T ramdisk -C none
--d $OUT/ramdisk.img $OUT/ramdisk.android.uboot
-```
-
-To run, enter into the u-boot console, and type
 ```
 poplar# run setupa
 poplar# run boota
+```
+
+## Debug, adb, Misc
+
+- adb
+
+Currently the board doesn't support usb OTG, you will have to use adb over tcp ip, and here are the steps to set it up.
+
+1. Plug an Ethernet cable to your board and make sure eth0 is getting its address  
+
+```
+poplar:/ # ifconfig 
+eth0      Link encap:Ethernet  HWaddr 66:2c:57:b3:f9:a3
+          inet addr:192.168.0.18  Bcast:192.168.0.255  Mask:255.255.255.0 
+          inet6 addr: fe80::642c:57ff:feb3:f9a3/64 Scope: Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:2072 errors:0 dropped:0 overruns:0 frame:0 
+          TX packets:258 errors:0 dropped:0 overruns:0 carrier:0 
+          collisions:0 txqueuelen:1000 
+          RX bytes:429037 TX bytes:28204 
+          Interrupt:35 
+```
+
+2. write down the ip address, 192.168.0.18 in this case
+
+3. On you developer machine:
+
+```
+$adb connect  ${poplar_ip_addr}       #192.168.0.18
+```
+
+And, check with `adb devices`
+
+```
+$ adb devices
+List of devices attached
+192.168.0.18:5555   device
+```
+
+4. Now, adb is ready for you to use, use `adb help` for more information.
+
+```
+$adb remount
+$adb push path/to/your/tools  /system/bin
 ```
