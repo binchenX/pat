@@ -13,6 +13,8 @@ On Ubuntu ` sudo apt-get install ruby-ful`
 
 Used by the script to convert Android sparse image to raw ext4 image. This will be available after a full android build, located at `${your_android}/out/host/linux-x86/bin/simg2img`
 
+3. A FAT32 formatted usb with capacity bigger than 8G. To format, check [this](https://askubuntu.com/questions/22381/how-to-format-a-usb-flash-drive).
+
 ## Instructions
 
 1. Download and build the poplar Android (follow internal wiki)
