@@ -1,17 +1,17 @@
 # Poplar Android Flash tools
 
-It will generate the install scripts and the images that can be put into a FAT32 formatted usb disk, and flashed to the board emmc through u-boot command.
+It will generate the install scripts and the images that can be put into a FAT32 formatted USB disk, and flashed to the board emmc through u-boot command.
 
 ## Dependency
 
 1. Ruby
 
-This is a ruby script so need to install ruby if have don't have one.
-On Ubuntu ` sudo apt-get install ruby-ful`
+This is a ruby script so you'll need to install ruby, if you have install one.
+On Ubuntu `sudo apt-get install ruby-ful`
 
 2. simg2img
 
-Used by the script to convert Android sparse image to raw ext4 image. This will be available after a full android build, located at `${your_android}/out/host/linux-x86/bin/simg2img`
+Used by the script to convert Android sparse image to raw ext4 image. This will be available after a full Android build, located at `${your_android}/out/host/linux-x86/bin/simg2img`
 
 3. A FAT32 formatted usb with capacity bigger than 8G. To format, check [this](https://askubuntu.com/questions/22381/how-to-format-a-usb-flash-drive).
 
@@ -54,15 +54,11 @@ Below here is a little bit what is copied and where they are from:
 ```
 
 Notes:
-
 - a) are install scripts for u-boot
 - b) are partition table; prebuilt, come with this repo
-- c) bootloader.img; a prebuild is provided for the convenience. But you are suggested to build your own using the latest l-loader/atf/u-boot to stay in sync. The `bootloader.img` is generated from of the `l-loader.bin` by removing its first 512 bytes, as shown below. To build `l-loader.bin`, follow the instructions instructed [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md)
-A prebuilt is provided as well.
+- c) bootloader.img; a prebuild is provided for the convenience. But you are suggested to build your own using the latest l-loader/atf/u-boot to stay in sync. The `bootloader.img` is generated from of the `l-loader.bin` by removing its first 512 bytes, as shown below. To build `l-loader.bin`, follow the instructions[here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md).
 
 ```
     dd if=l-loader.bin of=bootloader.img bs=512 skip=1 count=8191
 ```
-
 - d) are converted from android core images, splitted, and raw or ext4 (NOT sparse image)
-
