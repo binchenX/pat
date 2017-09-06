@@ -19,11 +19,13 @@ Used by the script to convert Android sparse image to raw ext4 image. This will 
 
 1. Download and build the poplar Android (follow internal wiki)
 
-2. Put script `poplar_android_flash.rb` in the $OUT
+2. Check the pat tool to anywhere you want. `git clone git@github.com:pierrchen/pat.git /path/to/pat_tool`; and move `cp $OUT/*.img path/to/pat_tool`. 
 
-3. Run `ruby ./poplar_android_flash.rb`
+(The `$OUT` is an environment variable setting by android build system after you did `source build/envsetup.sh; lunch`. For poplar, it is `${your_android_src_root}/out/target/product/poplar`.) 
 
-4. Copy following stuff to your FAT32 formatted USB disk for a whole re-flash. Or, just copy the files/images you want to re-flash, say boot.img and flash_boot.scr.
+3. Run `ruby ./poplar_android_flash.rb` in pat_tool.
+
+4. Copy following stuff (using `install_usb.sh` script as we'll show later)to your FAT32 formatted USB disk for a whole re-flash. 
 
 ```
     a) *.scr
@@ -36,7 +38,8 @@ Notes:
 
 - a) are install scripts for u-boot
 - b) are partition table; prebuilt, come with this repo
-- c) is generated from of the `l-loader.bin` by removing its first 512 bytes, as shown below. To build `l-loader.bin`, follow the instructions instructed [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md)
+- c) bootloader.img; a prebuild is provided for the convenience. But you are suggested to build your own using the latest l-loader/atf/u-boot to stay in sync. The `bootloader.img` is generated from of the `l-loader.bin` by removing its first 512 bytes, as shown below. To build `l-loader.bin`, follow the instructions instructed [here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md)
+A prebuilt is provided as well.
 
 ```
     dd if=l-loader.bin of=bootloader.img bs=512 skip=1 count=8191
