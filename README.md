@@ -25,7 +25,26 @@ Used by the script to convert Android sparse image to raw ext4 image. This will 
 
 3. Run `ruby ./poplar_android_flash.rb` in pat_tool.
 
-4. Copy following stuff (using `install_usb.sh` script as we'll show later)to your FAT32 formatted USB disk for a whole re-flash. 
+4. Run `./install_usb.sh usb_mount_point` to copy all the required images and scripts to your usb disk. In Ubuntu 14.04 the mount point follows the format of `/media/<user>/<usb_id>`. 
+
+See below a description regarding what is copied to the usb disk.
+
+5. To flash all the partitions, power on the board, access u-boot console, copy paste following *long* commands:
+
+```
+usb reset;fatload usb 0:1 ${scriptaddr} flash_pt.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_bootloader.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_system.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_userdata.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_cache.scr; source ${scriptaddr};
+```
+
+OK. I know that script is too long. I probably can use u-boot script to make it shorter but for now please bear with me. I'll show you how to flash a single system partition, and you will get the idea how to flash others.
+
+```
+usb reset
+fatload usb 0:1 ${scriptaddr} flash_system.scr;source ${scriptaddr};
+```
+
+## What was copied and flashed?
+
+Below here is a little bit what is copied and where they are from:
 
 ```
     a) *.scr
@@ -47,17 +66,3 @@ A prebuilt is provided as well.
 
 - d) are converted from android core images, splitted, and raw or ext4 (NOT sparse image)
 
-4. To flash all the partitions, first run `./install_usb.sh usb_mount_point` to copy all the required images and scripts to your usb disk. The usb_mount_point parameters passed in , for Ubuntu 14.04 it is `/media/<user>/<usb_id>`.
-
-Power on the board, enter into u-boot console, copy paste following commands:
-
-```
-usb reset;fatload usb 0:1 ${scriptaddr} flash_pt.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_bootloader.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_system.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_userdata.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_cache.scr; source ${scriptaddr};
-```
-
-OK. I know that script is too long. I probably can use u-boot script to make it shorter but for now please bear with me. I'll show you how to flash a single system partition, and you will get the idea how to flash others.
-
-```
-usb reset
-fatload usb 0:1 ${scriptaddr} flash_system.scr;source ${scriptaddr};
-```
