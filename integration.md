@@ -10,9 +10,11 @@ We will keep it simple but useful.
 
 ### 1.1 Unit Test audio
 
-1. on the host
+1. (host)
 Download any .wav file, call it `test_audio.wav`.
+```
 adb push test_audio.wav /sdcard/test.wav
+```
 
 2. on poplar console, after board booting up
 ```
@@ -24,7 +26,28 @@ What to Expect:
 
 You should hear the audio in both HDMI and audio line out interface.
 
-### 1.2 test local media playback
+### 1.2 Play mp3 file
+
+1. (host)
+Download [Wheels on the Bus](http://billysworld.biz/wp-content/uploads/2014/12/WheelsOn-the-Bus.1.mp3)
+
+```
+adb push WheelsOn-the-Bus.1.mp3 /sdcard/wheels.mp3
+```
+
+2. on poplar console, after board boot up
+
+```
+# stagefright -a -o /sdcard/wheels.mp3 
+```
+
+If you don't have access the console, you can use apps to play it. Reboot the board, open "Downloads" app, click "Audio", go through the dir hierarchy : `Unknown` -> `0 `-> `wheels.mp3`, and double click it. 
+
+What to Expect:
+
+You should hear the audio in both HDMI and audio line out interface.
+
+### 1.3 test local media playback
 
 1. Download the one of mp4 video from [1], call it `test_video.mp4`
 
