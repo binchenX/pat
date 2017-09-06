@@ -42,10 +42,22 @@ Notes:
 
 - d) are converted from android core images, splitted, and raw or ext4 (NOT sparse image)
 
-4. Follow [this](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md), check the section `Run the recovery on the Poplar board`, to run the flash scripts in bootloader mode. Just replace the install.scr with flash_xxx.scr you want to use.
+4. To flash all the partitions, first copy required images and scripts to your usb disk
 
-say, to flash bootloader, use the `flash_bootloader.scr` script.
+```sh
+usb_mount_point=
+cp mbr.gz            ${usb_mount_point}
+cp ebr*.bin.gz       ${usb_mount_point}
+cp bootloader.img    ${usb_mount_point}
+cp boot.img          ${usb_mount_point}
+cp system.img.raw_*  ${usb_mount_point}
+cp cache.img.raw_*   ${usb_mount_point}
+cp userdata.img_*    ${usb_mount_point}
+cp flash_*.scr       ${usb_mount_point}
 ```
-    usb reset
-    fatload usb 0:1 ${scriptaddr} flash_bootloader.scr; source ${scriptaddr}
+
+Power on the board, enter into u-boot console, copy paste following commands:
+
+```
+usb reset;fatload usb 0:1 ${scriptaddr} flash_pt.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_bootloader.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_system.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_userdata.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_cache.scr; source ${scriptaddr};
 ```
