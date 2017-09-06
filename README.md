@@ -44,19 +44,7 @@ Notes:
 
 - d) are converted from android core images, splitted, and raw or ext4 (NOT sparse image)
 
-4. To flash all the partitions, first copy required images and scripts to your usb disk
-
-```sh
-usb_mount_point=
-cp mbr.gz            ${usb_mount_point}
-cp ebr*.bin.gz       ${usb_mount_point}
-cp bootloader.img    ${usb_mount_point}
-cp boot.img          ${usb_mount_point}
-cp system.img.raw_*  ${usb_mount_point}
-cp cache.img.raw_*   ${usb_mount_point}
-cp userdata.img_*    ${usb_mount_point}
-cp flash_*.scr       ${usb_mount_point}
-```
+4. To flash all the partitions, first run `./install_usb.sh usb_mount_point` to copy all the required images and scripts to your usb disk. The usb_mount_point parameters passed in , for Ubuntu 14.04 it is `/media/<user>/<usb_id>`.
 
 Power on the board, enter into u-boot console, copy paste following commands:
 
