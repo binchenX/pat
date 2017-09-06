@@ -18,6 +18,7 @@ adb push test_audio.wav /sdcard/test.wav
 
 2. on poplar console, after board booting up
 ```
+# su
 # tinyplay /sdcard/test.wav
 Playing sample: 2 ch, 44100 hz, 16 bit
 ```
@@ -38,6 +39,7 @@ adb push WheelsOn-the-Bus.1.mp3 /sdcard/wheels.mp3
 2. on poplar console, after board boot up
 
 ```
+# su
 # stagefright -a -o /sdcard/wheels.mp3 
 ```
 
