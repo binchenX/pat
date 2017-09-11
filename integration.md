@@ -6,6 +6,12 @@ It's not our intention here to provide a full set of test cases to validate a an
 
 We will keep it simple but useful.
 
+## Smoke Test
+
+Following test is required to run for any patch submission. 
+
+TBD:
+
 ## Test Video/Video
 
 ### 1.1 Unit Test audio
