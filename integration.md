@@ -81,10 +81,6 @@ You should see the video playing and hear the audio in both HDMI and audio lineo
 
 ## Test BlueTooth
 
-## Known Issues
-
-- audio: audio line out isn't configured correctly at the moment, waiting kernel patch.
-
 ## Report Issues
 
 ### Debug & capture logs
@@ -123,3 +119,21 @@ adb logcat                               >> log_no_audio
 ```
 
 `ctrl+c` to kill logcat and send along the `log_no_audio` file.
+
+## Feature validated
+
+| Features            | Status       |
+| --------            | -------------|
+| OpenGL              |     Y        |
+| FB dev              |     Y        |
+| HDMI Display        |     Y        |
+| HDMI Audio          |     Y        |
+| Audio Decoder       |     Y        |
+| Video Decoder       |     Y        |
+| Ethernet            |     Y        |
+| USB Mouse/Keyboard  |     Y        |
+
+## Known Issues
+
+- audio: audio line out isn't configured correctly at the moment, waiting kernel patch.
+- setting app crash
