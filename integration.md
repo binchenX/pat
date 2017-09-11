@@ -134,8 +134,8 @@ adb logcat                               >> log_no_audio
 | FB dev              |     Y        |
 | HDMI Display        |     Y        |
 | HDMI Audio          |     Y        |
-| Audio Decoder       |     Y        |
-| Video Decoder       |     Y        |
+| Audio Decoder (SW)  |     Y        |
+| Video Decoder (SW)  |     Y        |
 | Ethernet            |     Y        |
 | USB Mouse/Keyboard  |     Y        |
 
