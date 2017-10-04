@@ -2,7 +2,7 @@
 # to a fat32 formatted usb disk, and then allows you
 # re-flash the emmc with.
 
-# partition table we are now using.
+# partition table we are now using. (u-boot based)
 # Part    Start Sector    Num Sectors     UUID            Type
 #   1     1               8191            6d9fd96d-01     83
 #   2     8192            81920           6d9fd96d-02     83
@@ -10,6 +10,7 @@
 #   4     2187263         13082625        6d9fd96d-04     0f Extd
 #   5     2187264         2097151         6d9fd96d-05     83
 #   6     4284416         10985472        6d9fd96d-06     83
+#
 
 @pt = {
       "bootloader" => [1,      8191    ],
@@ -17,6 +18,29 @@
       "system"     => [90112,  2097151 ],
       "cache"      => [2187264,2097151 ],
       "userdata"   => [4284416,10985472]}
+
+# UEFI based. (Not used yet)
+# #    Start     Size     Type FS Type Description
+# -    -----     ----     ---- ------- -----------
+# *        0        1      MBR
+# 1        1     8191     0xf0    none loader
+# 2     8192   262144     0xef    vfat /boot       <-- EFI partition
+# 3   270336    81919     0xda    none android_boot
+# 4   352255 14917633     0x0f    none extended
+# *   352255        1      EBR
+# 5   352256  2097151     0x83    ext4 android_system
+# *  2449407        1      EBR
+# 6  2449408  2097151     0x83    ext4 android_cache
+# *  4546559        1      EBR
+# 7  4546560 10723328     0x83    ext4 android_user_data
+
+@pt_uefi = {
+      "bootloader" => [1,      8191    ],
+      "efi"        => [8192,   262144  ],
+      "boot"       => [270336, 81919   ],
+      "system"     => [352256, 2097151 ],
+      "cache"      => [2449408,2097151 ],
+      "userdata"   => [4546560,10723328]}
 
 @SECTOR_SIZE = 512
 @CHUNK_SIZE = 300*1024*1024;
