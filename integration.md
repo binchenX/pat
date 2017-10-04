@@ -138,6 +138,8 @@ adb logcat                               >> log_no_audio
 | Video Decoder (SW)  |     Y        |
 | Ethernet            |     Y        |
 | USB Mouse/Keyboard  |     Y        |
+| Wifi                |     Y        |
+| BT (audio)          |     Y        |
 
 ## Known Issues
 
