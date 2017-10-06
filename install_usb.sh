@@ -15,3 +15,4 @@ cp boot.img          ${usb_mount_point}
 cp system.img.raw_*  ${usb_mount_point}
 cp cache.img.raw_*   ${usb_mount_point}
 cp userdata.img.raw_*    ${usb_mount_point}
+sync

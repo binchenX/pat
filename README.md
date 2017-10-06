@@ -23,7 +23,7 @@ Used by the script to convert Android sparse image to raw ext4 image. This will 
 
 (The `$OUT` is an environment variable setting by android build system after you did `source build/envsetup.sh; lunch`. For poplar, it is `${your_android_src_root}/out/target/product/poplar`.) 
 
-3. Run `ruby ./poplar_android_flash.rb` in pat_tool.
+3. Run `./poplar_android_flash.rb` in pat_tool.
 
 4. Run `./install_usb.sh usb_mount_point` to copy all the required images and scripts to your usb disk. In Ubuntu 14.04 the mount point follows the format of `/media/<user>/<usb_id>`. 
 

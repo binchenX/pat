@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 # generate the files and scripts that can be copied
 # to a fat32 formatted usb disk, and then allows you
 # re-flash the emmc with.
