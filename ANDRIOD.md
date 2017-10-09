@@ -16,8 +16,6 @@ repo sync -j8
 
 ### Add poplar device
 
-Use the `newUboot` branch to work with new u-boot and new kernel.
-
 ```
 mkdir device/hisilicon
 git clone ssh://git@dev-private-git.linaro.org/aspen/staging/device/linaro/poplar.git   device/hisilicon/poplar
