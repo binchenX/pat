@@ -91,6 +91,17 @@ def make_uboot_script(output_directory, raw_command):
     call(shlex_split(cmd), stdout=subprocess_PIPE)
 
 
+
+def copy_pt(args):
+    print("process pt, just copy")
+    files = ['flash_pt.scr', 'mbr.gz', 'ebr5.bin.gz', 'ebr6.bin.gz']
+    for f in files:
+        scr = os.path.join(args.input_directory, f)
+        dst = os.path.join(args.output_directory, f)
+        cp_cmd = 'cp {} {}'.format(scr, dst)
+        system(cp_cmd)
+
+
 def go(args):
 
     if not os.path.exists(args.input_directory):
@@ -101,24 +112,30 @@ def go(args):
         mkdir(args.output_directory)
 
     for k in args.partitions:
-        if process(args.output_directory, "{}.img".format(k), args.input_directory):
-            s = install_script_for(args.output_directory, k)
-            raw_cmd = "flash_{}".format(k)
-            with open(raw_cmd, "w") as f:
-                f.write(s)
-            make_uboot_script(args.output_directory, raw_cmd)
+        if k == 'pt':
+           copy_pt(args)
+        else:
+            if process(args.output_directory, "{}.img".format(k), args.input_directory):
+                s = install_script_for(args.output_directory, k)
+                raw_cmd = "flash_{}".format(k)
+                with open(raw_cmd, "w") as f:
+                    f.write(s)
+                make_uboot_script(args.output_directory, raw_cmd)
 
 
 def main():
     parser = argparse.ArgumentParser('')
+    valid_pts = list(pt.keys())
+    valid_pts.append('pt')
+
     default_pt = list(pt.keys())
     default_pt.remove('bootloader')
     parser.add_argument('-p', '--partitions',
                         help='valid values are [{}]'.format(
-                            ','.join(pt.keys())),
+                            ','.join(valid_pts)),
                         nargs='*', default=default_pt)
     parser.add_argument('-i', '--input_directory', default=os.path.curdir)
-    parser.add_argument('-o', '--output_directory', default=os.path.curdir)
+    parser.add_argument('-o', '--output_directory', default="./out_usb")
     args = parser.parse_args()
     print(args.partitions)
     go(args)
