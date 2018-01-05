@@ -111,10 +111,12 @@ def go(args):
 
 def main():
     parser = argparse.ArgumentParser('')
+    default_pt = list(pt.keys())
+    default_pt.remove('bootloader')
     parser.add_argument('-p', '--partitions',
                         help='valid values are [{}]'.format(
                             ','.join(pt.keys())),
-                        nargs='*', default=pt.keys())
+                        nargs='*', default=default_pt)
     parser.add_argument('-i', '--input_directory', default=os.path.curdir)
     parser.add_argument('-o', '--output_directory', default=os.path.curdir)
     args = parser.parse_args()
