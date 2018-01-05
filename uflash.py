@@ -23,12 +23,13 @@ def need_to_convert_to_raw(img):
     else:
         return False
 
-def process(out, img):
+def process(out, img, in_dir=os.path.curdir):
     print("process ", img)
 
+    in_image = os.path.join(in_dir, img)
     if need_to_convert_to_raw(img):
         out_raw = os.path.join(out, img) + ".raw"
-        conv2raw_cmd = "simg2img {} {}".format(img, out_raw)
+        conv2raw_cmd = "simg2img {} {}".format(in_image, out_raw)
         print(conv2raw_cmd)
         system(conv2raw_cmd)
 
@@ -36,11 +37,11 @@ def process(out, img):
     else:
         if out != os.path.curdir:
             cp_dst = os.path.join(out, img)
-            cp_cmd = 'cp {} {}'.format(img, cp_dst)
+            cp_cmd = 'cp {} {}'.format(in_image, cp_dst)
             system(cp_cmd)
             split_src = cp_dst
         else:
-            split_src = img
+            split_src = in_image
 
     # from here on, all the image we'll deal with are in the {out}
     if path.getsize(split_src) < CHUNK_SIZE:
@@ -91,11 +92,16 @@ def make_uboot_script(output_directory, raw_command):
 
 
 def go(args):
+
+    if not os.path.exists(args.input_directory):
+        print(args.input_directory, "not exsits")
+        sys.exit()
+
     if not os.path.exists(args.output_directory):
         mkdir(args.output_directory)
 
     for k in args.partitions:
-        if process(args.output_directory, "{}.img".format(k)):
+        if process(args.output_directory, "{}.img".format(k), args.input_directory):
             s = install_script_for(args.output_directory, k)
             raw_cmd = "flash_{}".format(k)
             with open(raw_cmd, "w") as f:
@@ -109,8 +115,8 @@ def main():
                         help='valid values are [{}]'.format(
                             ','.join(pt.keys())),
                         nargs='*', default=pt.keys())
-
-    parser.add_argument('-d', '--output_directory', default=os.path.curdir)
+    parser.add_argument('-i', '--input_directory', default=os.path.curdir)
+    parser.add_argument('-o', '--output_directory', default=os.path.curdir)
     args = parser.parse_args()
     print(args.partitions)
     go(args)
