@@ -45,24 +45,3 @@ To flash single parititions, for example, system partition, use following:
 usb reset
 fatload usb 0:1 ${scriptaddr} flash_system.scr;source ${scriptaddr};
 ```
-
-## What's in out_usb?
-
-Below here is a little bit what is copied and where they are from:
-
-```
-    a) *.scr
-    b) mbr.tgz and ebr*.tgz
-    c) bootloader.img (*)
-    d) boot.img, system.img.raw_*, usrdata.img.raw_* , cache.img.raw_*
-```
-
-Notes:
-- a) are install scripts for u-boot
-- b) are partition table; prebuilt, come with this repo
-- c) bootloader.img; a prebuild is provided for the convenience. But you are suggested to build your own using the latest l-loader/atf/u-boot to stay in sync. The `bootloader.img` is generated from of the `l-loader.bin` by removing its first 512 bytes, as shown below. To build `l-loader.bin`, follow the instructions[here](https://github.com/Linaro/poplar-tools/blob/latest/build_instructions.md).
-
-```
-    dd if=l-loader.bin of=bootloader.img bs=512 skip=1 count=8191
-```
-- d) are converted from android core images, splitted, and raw or xt4 (NOT sparse image)
