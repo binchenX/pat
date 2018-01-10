@@ -1,6 +1,6 @@
 # Poplar Android Flash tools
 
-It will generate the install scripts and the images that can be put into a FAT32 formatted USB disk, and flashed to the board emmc through u-boot command.
+It will generate the install scripts and the images that can be put into a FAT32 formatted USB disk, and flashed to the board Emmc through u-boot command.
 
 ## Dependency
 
@@ -18,34 +18,25 @@ apt-get install -y python python-pip android-tools-fsutils
 
 `git clone git@github.com:pierrchen/pat.git /path/to/pat_tool`;
 
-3. Geneate partitions data and flash script
+3. Generate partitions data and flash script
 
-``` 
-uflash.py -i $OUT
 ```
-
-The `$OUT` is an environment variable setting by Android build system after you did `source build/envsetup.sh; lunch`. For poplar, it is `${your_android_src_root}/out/target/product/poplar`.
+IMG_IN=${your_android_src_root}/out/target/product/poplar
+uflash.py -i $IMG_IN
+```
 
 By default, all the output goes to ./out_usb, you can specif it using `-o path/to/usb_out`.
-
-By default, flash tools only generate the partitions data and u-boot flash scripts for Android images, it doesn't including bootloader and partition table.
-
-To geneate those scripts and partition data,
-
-```
-uflash.py -i recovery-installer -p bootloader pt
-```
 
 4. Install generated partitions and flash script to usb.
 
 Run `install_usb.sh out_usb usb_mount_point` to copy all the required images and scripts to your usb disk. In Ubuntu 14.04 the mount point follows the format of `/media/<user>/<usb_id>`.
 
-5. Flash partitions.
+5. Flash All Android partitions.
  
-To flash all the partitions, power on the board, access u-boot console, copy paste following *long* commands:
+To flash all the Android partitions, power on the board, access u-boot console, copy paste following *long* commands:
 
 ```
-usb reset;fatload usb 0:1 ${scriptaddr} flash_pt.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_bootloader.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_boot.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_system.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_userdata.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_cache.scr; source ${scriptaddr};
+usb reset;fatload usb 0:1 ${scriptaddr} flash_boot.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_system.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_userdata.scr; source ${scriptaddr};fatload usb 0:1 ${scriptaddr} flash_cache.scr; source ${scriptaddr};
 ```
 
 To flash single parititions, for example, system partition, use following:
@@ -74,4 +65,4 @@ Notes:
 ```
     dd if=l-loader.bin of=bootloader.img bs=512 skip=1 count=8191
 ```
-- d) are converted from android core images, splitted, and raw or ext4 (NOT sparse image)
+- d) are converted from android core images, splitted, and raw or xt4 (NOT sparse image)
